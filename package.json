@@ -6,8 +6,10 @@
   "scripts": {
     "install-deps": "rm -rf node_modules && npm i",
     "build": "tsc",
+    "watch": "tsc --watch",
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn src/app.ts",
+    "swagger": "node swagger/swagger.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,7 +20,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.10.0"
+    "mongoose": "^8.10.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
@@ -27,7 +30,11 @@
     "@types/jsonwebtoken": "^9.0.8",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.1",
+    "@types/swagger-ui-express": "^4.1.7",
+    "@typescript-eslint/parser": "^8.24.1",
+    "concurrently": "^9.1.2",
     "eslint": "^9.20.0",
+    "swagger-autogen": "^2.23.7",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"

@@ -1,6 +1,8 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-// import { connectDB } from './config/db';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger/swagger.json';
+import { connectDB } from './config/db';
 import userRoutes from './modules/user/user.routes';
 
 dotenv.config();
@@ -8,10 +10,13 @@ dotenv.config();
 const app: Application = express();
 
 // connect DB
-// connectDB();
+connectDB();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Integrate Swagger: Serve API docs at the /api-docs endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Mount routes
 app.use('/api/v1/user', userRoutes);

@@ -8,6 +8,7 @@ export default tseslint.config(
     rules: {
       // Require semicolons at the end of statements.
       semi: ['error', 'always'],
+      'no-console': ['error', { allow: ['warn', 'error'] }]
     },
   },
 );
