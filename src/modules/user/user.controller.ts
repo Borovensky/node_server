@@ -24,10 +24,15 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
     */
     const { name, email, password } = req.body;
     const user = await createUser({ name, email, password });
-    const token = generateToken(user.id.toString());
+    // const token = generateToken(user.id.toString());
     
-    // HTTP-only cookie
-    setReadOnlyCookie(res, token);
+    // // HTTP-only cookie
+    // setReadOnlyCookie(res, token);
+
+    (req.session as any).user = {
+      id: user._id.toString(),
+      name: user.name
+    };
 
     res.status(201).json({
       message: "success",
@@ -59,14 +64,14 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     */
     const { email, password } = req.body;
     const user = await loginUser({ email, password });
-    const token = generateToken(user.id.toString());
 
-    // HTTP-only cookie
-    setReadOnlyCookie(res, token);
+    (req.session as any).user = {
+      id: user._id.toString(),
+      name: user.name
+    };
 
     res.status(201).json({
       message: "success",
-      user,
     });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,12 +86,29 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
     /*  #swagger.tags = ["Auth"]
         
     */
+    req.session.destroy((error) => {
+      if (error) {
+        return res.status(500).json({ message: "Logout failed" });
+      }
 
-    // HTTP-only cookie
-    setReadOnlyCookie(res, '');
+      res.clearCookie('connect.sid', { path: '/' });
+      res.status(201).json({ message: "Logout success" });
+    });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch(error: any) {
+    error.status = 400;
+    next(error);
+  }
+};
+
+
+export const info = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    
     res.status(201).json({
-      message: "success"
+      message: "success",
+      info: { key: "HUY" }
     });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

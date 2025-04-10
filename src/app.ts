@@ -1,16 +1,24 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger/swagger.json';
 import { connectDB } from './config/db';
 import userRoutes from './modules/user/user.routes';
-
-dotenv.config();
+import { sessionMiddleware } from './middlewares/session';
 
 const app: Application = express();
 
+// Session auth
+app.use(sessionMiddleware);
+
 // connect DB
 connectDB();
+
+//CORS
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
